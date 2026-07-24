@@ -30,8 +30,7 @@ const parseLength = input => {
 
   return {
     value: normalizedValue,
-    unit,
-    cssText: `${Math.abs(normalizedValue)}${unit}`
+    unit
   };
 };
 

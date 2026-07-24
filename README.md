@@ -60,6 +60,11 @@ $ unit-golf 57.3vw --tolerance 0
 
 Parens indicate how many pixels off each suggestion is from the target.
 
+Unit Golf calculates absolute and viewport units from their CSS-defined ratios.
+Font-relative units use a checked-in profile calibrated against Chromium's
+default document styles. This keeps normal conversions deterministic and avoids
+launching a browser.
+
 ## Development
 
 Unit Golf requires Node.js 22.12 or newer.
@@ -67,4 +72,10 @@ Unit Golf requires Node.js 22.12 or newer.
 ```sh
 yarn install
 yarn test
+```
+
+To print a freshly calibrated font-unit profile:
+
+```sh
+yarn calibrate:profile
 ```

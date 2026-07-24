@@ -1,6 +1,6 @@
-const getUnitsAndPxWidth = require("./get-units-and-px-width");
 const golf = require("./golf");
 const parseLength = require("./parse-length");
+const resolveUnits = require("./resolve-units");
 
 const numericOption = (name, value, { minimum, fallback }) => {
   const number = value === undefined ? fallback : Number(value);
@@ -34,14 +34,14 @@ const unitGolf = async ({
     return golf({ px: 0, units: [], tolerance: normalizedTolerance });
   }
 
-  const { units, pxWidth } = await getUnitsAndPxWidth({
-    input: length.cssText,
+  const units = resolveUnits({
     width: normalizedWidth,
     height: normalizedHeight
   });
+  const inputUnit = units.find(unit => unit.name === length.unit);
 
   return golf({
-    px: Math.sign(length.value) * pxWidth,
+    px: length.value * inputUnit.multiplier,
     units,
     tolerance: normalizedTolerance
   });

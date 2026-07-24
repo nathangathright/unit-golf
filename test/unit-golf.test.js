@@ -9,7 +9,7 @@ test("handles zero without launching a browser", async () => {
   ]);
 });
 
-test("preserves the sign of negative lengths", { timeout: 30_000 }, async () => {
+test("preserves the sign of negative lengths", async () => {
   const results = await unitGolf({
     input: "-10px",
     tolerance: 0,
@@ -24,9 +24,23 @@ test("preserves the sign of negative lengths", { timeout: 30_000 }, async () => 
   });
 });
 
+test("converts input units with deterministic multipliers", async () => {
+  const results = await unitGolf({
+    input: "57.3vw",
+    tolerance: 0,
+    width: 400,
+    height: 300
+  });
+
+  assert.deepEqual(results[0], {
+    unitValue: 57.3,
+    string: "57.3vw",
+    pixelOffset: 0
+  });
+});
+
 test(
   "converts with the supported unit set",
-  { timeout: 30_000 },
   async () => {
     const results = await unitGolf({
       input: "108px",

@@ -8,24 +8,21 @@ const parseLength = require("../src/parse-length");
 test("defaults unitless values to pixels", () => {
   assert.deepEqual(parseLength("325"), {
     value: 325,
-    unit: "px",
-    cssText: "325px"
+    unit: "px"
   });
 });
 
 test("normalizes signed and uppercase lengths", () => {
   assert.deepEqual(parseLength(" -10PX "), {
     value: -10,
-    unit: "px",
-    cssText: "10px"
+    unit: "px"
   });
 });
 
 test("accepts numeric API input", () => {
   assert.deepEqual(parseLength(0.5), {
     value: 0.5,
-    unit: "px",
-    cssText: "0.5px"
+    unit: "px"
   });
 });
 
