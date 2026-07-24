@@ -1,5 +1,3 @@
-const puppeteer = require("puppeteer");
-
 const UNITS = [
   "px",
   "vw",
@@ -14,6 +12,8 @@ const UNITS = [
   "q",
   "ch"
 ];
+
+const loadPuppeteer = () => import("puppeteer").then(module => module.default);
 
 const measureUnits = (value, units) => {
   const el = document.createElement("div");
@@ -41,12 +41,16 @@ const measureUnits = (value, units) => {
 };
 
 const getUnits = async ({ input, width, height }) => {
+  const puppeteer = await loadPuppeteer();
   const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.setViewport({ width, height });
-  const units = await page.evaluate(measureUnits, input, UNITS);
-  await browser.close();
-  return units;
+
+  try {
+    const page = await browser.newPage();
+    await page.setViewport({ width, height });
+    return await page.evaluate(measureUnits, input, UNITS);
+  } finally {
+    await browser.close();
+  }
 };
 
 module.exports = getUnits;
