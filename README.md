@@ -12,13 +12,13 @@ Where `VALUE_TO_CONVERT` is any whole or fractional number of the following unit
 
 `px, vw, vh, in, cm, mm, pt, pc, em, ex, q, ch`
 
-If the unit is ommitted (eg, `unit-golf 325`) it will default to pixels.
+If the unit is omitted (for example, `unit-golf 325`), it defaults to pixels.
 
 ### Options
 
 #### `--tolerance`
 
-Maximum difference in pixels that will be considered a match for a value. Defaults to `0.5`. Decreasing will yield more exact but less concise results and vice versa.
+Maximum difference in pixels that will be considered a match for a value. Defaults to `0.2`. Decreasing will yield more exact but less concise results and vice versa.
 
 #### `--width`
 
@@ -59,3 +59,12 @@ $ unit-golf 57.3vw --tolerance 0
 ```
 
 Parens indicate how many pixels off each suggestion is from the target.
+
+## Development
+
+Unit Golf requires Node.js 22.12 or newer.
+
+```sh
+yarn install
+yarn test
+```

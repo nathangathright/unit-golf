@@ -45,12 +45,19 @@ const convertAndSort = (px, units, tolerance) => {
   });
 };
 
-const unitGolf = ({ input, tolerance = 0.2, width = 400, height = 300 }) => {
-  return getUnitsAndPxWidth({ input, width, height }).then(
-    ({ units, pxWidth }) => {
-      return convertAndSort(pxWidth, units, tolerance);
-    }
-  );
+const unitGolf = async ({
+  input,
+  tolerance = 0.2,
+  width = 400,
+  height = 300
+}) => {
+  const { units, pxWidth } = await getUnitsAndPxWidth({
+    input,
+    width,
+    height
+  });
+
+  return convertAndSort(pxWidth, units, tolerance);
 };
 
 module.exports = unitGolf;
