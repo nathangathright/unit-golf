@@ -32,6 +32,11 @@ jobs:
       - name: Enable Corepack
         run: corepack enable
 
+      - name: Use system Chrome
+        run: |
+          chrome_path="$(command -v google-chrome)"
+          echo "PUPPETEER_EXECUTABLE_PATH=$chrome_path" >> "$GITHUB_ENV"
+
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
