@@ -1,0 +1,11 @@
+{
+  "name": "cssbattle",
+  "description": "Chromium default document metrics at a 16px font size",
+  "fontUnits": {
+    "em": 16,
+    "ex": 7.1796875,
+    "ch": 8,
+    "lh": 18,
+    "cap": 10.5859375
+  }
+}
