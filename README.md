@@ -10,7 +10,7 @@ Helps shorten units for cssbattle.dev
 
 Where `VALUE_TO_CONVERT` is any whole or fractional number of the following units:
 
-`px, vw, vh, in, cm, mm, pt, pc, em, ex, q, ch`
+`px, vw, vh, in, cm, mm, pt, pc, em, ex, q, ch, lh, cap`
 
 If the unit is omitted (for example, `unit-golf 325`), it defaults to pixels.
 

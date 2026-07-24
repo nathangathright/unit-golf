@@ -10,7 +10,9 @@ const UNITS = [
   "em",
   "ex",
   "q",
-  "ch"
+  "ch",
+  "lh",
+  "cap"
 ];
 
 const loadPuppeteer = () => import("puppeteer").then(module => module.default);
