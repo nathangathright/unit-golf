@@ -3,6 +3,27 @@ const test = require("node:test");
 
 const unitGolf = require("../src");
 
+test("handles zero without launching a browser", async () => {
+  assert.deepEqual(await unitGolf({ input: "0px" }), [
+    { unitValue: 0, string: "0", pixelOffset: 0 }
+  ]);
+});
+
+test("preserves the sign of negative lengths", { timeout: 30_000 }, async () => {
+  const results = await unitGolf({
+    input: "-10px",
+    tolerance: 0,
+    width: 400,
+    height: 300
+  });
+
+  assert.deepEqual(results[0], {
+    unitValue: -10,
+    string: "-10px",
+    pixelOffset: 0
+  });
+});
+
 test(
   "converts with the supported unit set",
   { timeout: 30_000 },

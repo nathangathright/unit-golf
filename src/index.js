@@ -1,48 +1,13 @@
 const getUnitsAndPxWidth = require("./get-units-and-px-width");
+const golf = require("./golf");
+const parseLength = require("./parse-length");
 
-const clampPrecision = (number, precision = 2) => {
-  const pow = Math.pow(10, precision);
-  return Number(Math.round(number * pow) / pow);
-};
-
-const getUnitValues = (px, unit, unitValue) => {
-  const { name, multiplier } = unit;
-  unitValue = unitValue || clampPrecision(px / multiplier);
-  const pixelOffset = clampPrecision(unitValue * multiplier - px);
-  return {
-    unitValue,
-    string: `${unitValue}${name}`.replace(/^0./, "."),
-    pixelOffset
-  };
-};
-
-const findBestUnitValue = (px, tolerance) => unit => {
-  let result = getUnitValues(px, unit);
-  const { unitValue } = result;
-
-  if (!Number.isInteger(unitValue, tolerance)) {
-    for (let i = unitValue.toString().split(".")[1].length - 1; i >= 0; i--) {
-      const newUnitValue = clampPrecision(unitValue, i);
-      const newResult = getUnitValues(px, unit, newUnitValue);
-      const { pixelOffset } = newResult;
-      if (Math.abs(pixelOffset) <= tolerance) {
-        result = newResult;
-      }
-    }
+const numericOption = (name, value, { minimum, fallback }) => {
+  const number = value === undefined ? fallback : Number(value);
+  if (!Number.isFinite(number) || number < minimum) {
+    throw new TypeError(`${name} must be at least ${minimum}`);
   }
-
-  return result;
-};
-
-const convertAndSort = (px, units, tolerance) => {
-  return units.map(findBestUnitValue(px, tolerance)).sort((a, b) => {
-    const [lnA, lnB] = [a, b].map(item => item.string.length);
-    const [offsetA, offsetB] = [a.pixelOffset, b.pixelOffset].map(Math.abs);
-    const lnDiff = lnA - lnB;
-    if (offsetA > tolerance) return 1;
-    if (lnDiff === 0) return offsetA - offsetB;
-    return lnDiff;
-  });
+  return number;
 };
 
 const unitGolf = async ({
@@ -51,13 +16,35 @@ const unitGolf = async ({
   width = 400,
   height = 300
 }) => {
-  const { units, pxWidth } = await getUnitsAndPxWidth({
-    input,
-    width,
-    height
+  const length = parseLength(input);
+  const normalizedTolerance = numericOption("tolerance", tolerance, {
+    minimum: 0,
+    fallback: 0.2
+  });
+  const normalizedWidth = numericOption("width", width, {
+    minimum: Number.EPSILON,
+    fallback: 400
+  });
+  const normalizedHeight = numericOption("height", height, {
+    minimum: Number.EPSILON,
+    fallback: 300
   });
 
-  return convertAndSort(pxWidth, units, tolerance);
+  if (length.value === 0) {
+    return golf({ px: 0, units: [], tolerance: normalizedTolerance });
+  }
+
+  const { units, pxWidth } = await getUnitsAndPxWidth({
+    input: length.cssText,
+    width: normalizedWidth,
+    height: normalizedHeight
+  });
+
+  return golf({
+    px: Math.sign(length.value) * pxWidth,
+    units,
+    tolerance: normalizedTolerance
+  });
 };
 
 module.exports = unitGolf;

@@ -1,19 +1,4 @@
-const UNITS = [
-  "px",
-  "vw",
-  "vh",
-  "in",
-  "cm",
-  "mm",
-  "pt",
-  "pc",
-  "em",
-  "ex",
-  "q",
-  "ch",
-  "lh",
-  "cap"
-];
+const UNIT_NAMES = require("./units");
 
 const loadPuppeteer = () => import("puppeteer").then(module => module.default);
 
@@ -49,7 +34,7 @@ const getUnits = async ({ input, width, height }) => {
   try {
     const page = await browser.newPage();
     await page.setViewport({ width, height });
-    return await page.evaluate(measureUnits, input, UNITS);
+    return await page.evaluate(measureUnits, input, UNIT_NAMES);
   } finally {
     await browser.close();
   }

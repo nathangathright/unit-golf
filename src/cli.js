@@ -26,13 +26,30 @@ const main = async () => {
     import("chalk"),
     import("ora")
   ]);
-  const args = minimist(process.argv.slice(2));
+  const argv = process.argv.slice(2);
+  const valueOptions = new Set(["--tolerance", "--width", "--height"]);
+  let signedInput;
+
+  for (let index = 0; index < argv.length; index += 1) {
+    if (valueOptions.has(argv[index])) {
+      index += 1;
+      continue;
+    }
+
+    if (/^-(?:\d+(?:\.\d*)?|\.\d+)(?:[a-z]+)?$/i.test(argv[index])) {
+      signedInput = argv.splice(index, 1)[0];
+      break;
+    }
+  }
+
+  const args = minimist(argv);
   const {
-    _: [input],
+    _: [positionalInput],
     tolerance,
     width,
     height
   } = args;
+  const input = signedInput || positionalInput;
   const spinner = ora();
   spinner.start();
 

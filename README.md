@@ -8,7 +8,7 @@ Helps shorten units for cssbattle.dev
 
 `$ unit-golf [VALUE_TO_CONVERT]`
 
-Where `VALUE_TO_CONVERT` is any whole or fractional number of the following units:
+Where `VALUE_TO_CONVERT` is any signed whole or fractional number of the following units:
 
 `px, vw, vh, in, cm, mm, pt, pc, em, ex, q, ch, lh, cap`
 
