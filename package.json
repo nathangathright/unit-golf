@@ -29,6 +29,5 @@
   "bugs": {
     "url": "https://github.com/nathangathright/unit-golf/issues"
   },
-  "homepage": "https://github.com/nathangathright/unit-golf",
-  "packageManager": "yarn@1.22.22"
+  "homepage": "https://github.com/nathangathright/unit-golf"
 }
