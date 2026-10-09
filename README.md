@@ -79,8 +79,8 @@ launching a browser.
 ## Development
 
 ```sh
-yarn install
-yarn test
+npm install
+npm test
 ```
 
 Unit Golf has no runtime dependencies or build step.
