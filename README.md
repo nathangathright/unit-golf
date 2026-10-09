@@ -1,8 +1,21 @@
-Helps shorten units for cssbattle.dev
+# Unit Golf
+
+Shortens CSS lengths for [CSSBattle](https://cssbattle.dev/).
+
+> **Fork notice:** `nathangathright/unit-golf` is Nathan Gathright's maintained fork of
+> [Alex Zaworski's original project](https://github.com/alexzaworski/unit-golf).
+> The fork isn't published to npm. Installing `unit-golf` from npm installs the
+> original release.
 
 ## Installation
 
-`yarn global add unit-golf` || `npm install --global unit-golf`
+Install this fork directly from GitHub:
+
+```sh
+npm install --global github:nathangathright/unit-golf
+```
+
+Requires Node.js 22.12 or newer.
 
 ## Usage
 
@@ -22,43 +35,40 @@ Maximum difference in pixels that will be considered a match for a value. Defaul
 
 #### `--width`
 
-Viewport width for the purpose of calculating vw units. Defaults to `400`, which is what cssbattle currently uses.
+Viewport width for the purpose of calculating vw units. Defaults to `400`, which is what CSSBattle currently uses.
 
 #### `--height`
 
-Viewport height for the purpose of calculating vh units. Defaults to `300`, which is what cssbattle currently uses.
+Viewport height for the purpose of calculating vh units. Defaults to `300`, which is what CSSBattle currently uses.
 
 ### Examples
 
 ```
 $ unit-golf 57.3vw
 
-⛳  32ex (-0.19px)
+⛳  172pt (+0.13px)
 
-172pt (+0.14px)
-229px (-0.19px)
-57.3vw (+0.01px)
-76.4vh (+0.01px)
+229px (-0.2px)
+57.3vw
+76.4vh
 242.6q (+0.03px)
-6.06cm (-0.15px)
-60.6mm (-0.15px)
-28.65ch (+0.01px)
-14.32pc (-0.07px)
-14.32em (-0.07px)
-2.39in (+0.25px)
+60.6mm (-0.16px)
+6.06cm (-0.16px)
+…
 ```
 
 ```
 $ unit-golf 57.3vw --tolerance 0
 
-⛳  242.57q
+⛳  57.3vw
 
-60.64mm
-171.89pt
-...
+76.4vh
+229.2px
+171.9pt
+…
 ```
 
-Parens indicate how many pixels off each suggestion is from the target.
+Parentheses indicate how many pixels each suggestion differs from the target.
 
 Unit Golf calculates absolute and viewport units from their CSS-defined ratios.
 Font-relative units use a checked-in profile calibrated against Chromium's
@@ -79,3 +89,7 @@ To print a freshly calibrated font-unit profile:
 ```sh
 yarn calibrate:profile
 ```
+
+## License
+
+[MIT](LICENSE) © 2019 Alex Zaworski.
