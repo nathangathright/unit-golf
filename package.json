@@ -1,6 +1,6 @@
 {
   "name": "unit-golf",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "license": "MIT",
   "main": "src/index.js",
   "bin": {
@@ -10,21 +10,12 @@
     "src"
   ],
   "scripts": {
-    "calibrate:profile": "node scripts/calibrate-profile.js",
     "test": "node --test"
   },
-  "dependencies": {
-    "chalk": "^5.6.2",
-    "minimist": "^1.2.8",
-    "ora": "^9.4.1"
-  },
-  "devDependencies": {
-    "puppeteer": "^25.3.0"
-  },
-  "description": "helps shorten pixel units for cssbattle.dev",
+  "description": "Shortens CSS lengths for CSSBattle",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/alexzaworski/unit-golf.git"
+    "url": "git+https://github.com/nathangathright/unit-golf.git"
   },
   "engines": {
     "node": ">=22.12.0"
@@ -36,8 +27,8 @@
   ],
   "author": "Alex Zaworski (https://zawor.ski)",
   "bugs": {
-    "url": "https://github.com/alexzaworski/unit-golf/issues"
+    "url": "https://github.com/nathangathright/unit-golf/issues"
   },
-  "homepage": "https://github.com/alexzaworski/unit-golf",
+  "homepage": "https://github.com/nathangathright/unit-golf",
   "packageManager": "yarn@1.22.22"
 }
