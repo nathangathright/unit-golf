@@ -3,11 +3,7 @@
 const MAX_PRECISION = 8;
 
 const normalizeZero = number => (Object.is(number, -0) ? 0 : number);
-
-const roundError = number => {
-  const rounded = Number(number.toFixed(2));
-  return normalizeZero(rounded);
-};
+const normalizeError = number => normalizeZero(Number(number.toFixed(12)));
 
 const serializeScaledInteger = (integer, precision) => {
   if (!Number.isSafeInteger(integer)) {
@@ -130,18 +126,18 @@ const golfUnit = (px, unit, tolerance) => {
   candidate ||= fallbackCandidate(px, multiplier);
 
   return {
-    unitValue: candidate.unitValue,
-    string: `${candidate.number}${name}`,
-    pixelOffset: roundError(candidate.error),
-    error: candidate.error,
+    value: candidate.unitValue,
+    unit: name,
+    css: `${candidate.number}${name}`,
+    errorPx: normalizeError(candidate.error),
     withinTolerance: isWithinTolerance(candidate.error, px, tolerance)
   };
 };
 
 const compareResults = (a, b) =>
   Number(b.withinTolerance) - Number(a.withinTolerance) ||
-  a.string.length - b.string.length ||
-  Math.abs(a.error) - Math.abs(b.error) ||
+  a.css.length - b.css.length ||
+  Math.abs(a.errorPx) - Math.abs(b.errorPx) ||
   a.index - b.index;
 
 const golf = ({ px, units, tolerance }) => {
@@ -151,7 +147,15 @@ const golf = ({ px, units, tolerance }) => {
   }
 
   if (px === 0) {
-    return [{ unitValue: 0, string: "0", pixelOffset: 0 }];
+    return [
+      {
+        value: 0,
+        unit: null,
+        css: "0",
+        errorPx: 0,
+        withinTolerance: true
+      }
+    ];
   }
 
   return units
@@ -160,7 +164,7 @@ const golf = ({ px, units, tolerance }) => {
       index
     }))
     .sort(compareResults)
-    .map(({ withinTolerance, error, index, ...result }) => result);
+    .map(({ index, ...result }) => result);
 };
 
 module.exports = golf;

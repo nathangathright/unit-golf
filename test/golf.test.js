@@ -20,7 +20,15 @@ test("finds the shortest value inside the tolerance interval", () => {
       tolerance: 0.2,
       units: [{ name: "px", multiplier: 1 }]
     }),
-    [{ unitValue: 10, string: "10px", pixelOffset: 0.1 }]
+    [
+      {
+        value: 10,
+        unit: "px",
+        css: "10px",
+        errorPx: 0.1,
+        withinTolerance: true
+      }
+    ]
   );
 });
 
@@ -31,13 +39,27 @@ test("serializes negative fractions correctly", () => {
       tolerance: 0,
       units: [{ name: "px", multiplier: 1 }]
     }),
-    [{ unitValue: -0.5, string: "-.5px", pixelOffset: 0 }]
+    [
+      {
+        value: -0.5,
+        unit: "px",
+        css: "-.5px",
+        errorPx: 0,
+        withinTolerance: true
+      }
+    ]
   );
 });
 
 test("uses unitless zero", () => {
   assert.deepEqual(golf({ px: 0, tolerance: 0, units: [] }), [
-    { unitValue: 0, string: "0", pixelOffset: 0 }
+    {
+      value: 0,
+      unit: null,
+      css: "0",
+      errorPx: 0,
+      withinTolerance: true
+    }
   ]);
 });
 
@@ -51,6 +73,8 @@ test("sorts valid results before shorter values outside tolerance", () => {
     ]
   });
 
-  assert.equal(results[0].string, "10absoluteunit");
-  assert.equal(results[1].string, "3.33333333q");
+  assert.equal(results[0].css, "10absoluteunit");
+  assert.equal(results[1].css, "3.33333333q");
+  assert.equal(results[0].withinTolerance, true);
+  assert.equal(results[1].withinTolerance, false);
 });

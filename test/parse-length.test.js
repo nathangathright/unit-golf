@@ -27,7 +27,7 @@ test("accepts numeric API input", () => {
 });
 
 test("rejects unsupported CSS expressions", () => {
-  assert.throws(() => parseLength("calc(1px + 2vw)"), /invalid CSS length/);
-  assert.throws(() => parseLength("10rem"), /invalid CSS length/);
-  assert.throws(() => parseLength(), /input must be a CSS length/);
+  assert.throws(() => parseLength("calc(1px + 2vw)"), /Invalid CSS length/);
+  assert.throws(() => parseLength("10rem"), /Invalid CSS length/);
+  assert.throws(() => parseLength(), /Input must be a CSS length/);
 });

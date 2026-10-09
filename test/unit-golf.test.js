@@ -1,83 +1,100 @@
+"use strict";
+
 const assert = require("node:assert/strict");
 const test = require("node:test");
 
 const unitGolf = require("../src");
 
-test("handles zero without launching a browser", async () => {
-  assert.deepEqual(await unitGolf({ input: "0px" }), [
-    { unitValue: 0, string: "0", pixelOffset: 0 }
-  ]);
+test("returns a structured result for zero", () => {
+  assert.deepEqual(unitGolf({ input: "0px" }), {
+    schemaVersion: 1,
+    ok: true,
+    input: "0px",
+    targetPx: 0,
+    tolerancePx: 0.2,
+    viewport: { width: 400, height: 300 },
+    profile: "cssbattle",
+    best: {
+      value: 0,
+      unit: null,
+      css: "0",
+      errorPx: 0,
+      withinTolerance: true
+    },
+    alternatives: []
+  });
 });
 
-test("preserves the sign of negative lengths", async () => {
-  const results = await unitGolf({
+test("preserves the sign of negative lengths", () => {
+  const result = unitGolf({
     input: "-10px",
     tolerance: 0,
     width: 400,
     height: 300
   });
 
-  assert.deepEqual(results[0], {
-    unitValue: -10,
-    string: "-10px",
-    pixelOffset: 0
+  assert.deepEqual(result.best, {
+    value: -10,
+    unit: "px",
+    css: "-10px",
+    errorPx: 0,
+    withinTolerance: true
   });
 });
 
-test("converts input units with deterministic multipliers", async () => {
-  const results = await unitGolf({
+test("converts input units with deterministic multipliers", () => {
+  const result = unitGolf({
     input: "57.3vw",
     tolerance: 0,
     width: 400,
     height: 300
   });
 
-  assert.deepEqual(results[0], {
-    unitValue: 57.3,
-    string: "57.3vw",
-    pixelOffset: 0
+  assert.equal(result.targetPx, 229.2);
+  assert.deepEqual(result.best, {
+    value: 57.3,
+    unit: "vw",
+    css: "57.3vw",
+    errorPx: 0,
+    withinTolerance: true
   });
 });
 
-test(
-  "converts with the supported unit set",
-  async () => {
-    const results = await unitGolf({
-      input: "108px",
-      tolerance: 0,
-      width: 400,
-      height: 300
-    });
+test("returns every supported unit", () => {
+  const result = unitGolf({
+    input: "108px",
+    tolerance: 0,
+    width: 400,
+    height: 300
+  });
+  const candidates = [result.best, ...result.alternatives];
 
-    assert.equal(results.length, 14);
-    assert.deepEqual(
-      results
-        .map(result => result.string.match(/[a-z]+$/)[0])
-        .sort(),
-      [
-        "cap",
-        "ch",
-        "cm",
-        "em",
-        "ex",
-        "in",
-        "lh",
-        "mm",
-        "pc",
-        "pt",
-        "px",
-        "q",
-        "vh",
-        "vw"
-      ]
-    );
-    assert.deepEqual(
-      results[0],
-      {
-        unitValue: 6,
-        string: "6lh",
-        pixelOffset: 0
-      }
-    );
-  }
-);
+  assert.equal(candidates.length, 14);
+  assert.deepEqual(
+    candidates.map(candidate => candidate.unit).sort(),
+    [
+      "cap",
+      "ch",
+      "cm",
+      "em",
+      "ex",
+      "in",
+      "lh",
+      "mm",
+      "pc",
+      "pt",
+      "px",
+      "q",
+      "vh",
+      "vw"
+    ]
+  );
+  assert.equal(result.best.css, "6lh");
+});
+
+test("rejects invalid options with stable error codes", () => {
+  assert.throws(
+    () => unitGolf({ input: "10px", tolerance: -1 }),
+    error => error.code === "INVALID_OPTION"
+  );
+});
